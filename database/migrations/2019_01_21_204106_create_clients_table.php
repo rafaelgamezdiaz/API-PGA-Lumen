@@ -15,24 +15,10 @@ class CreateClientsTable extends Migration
     {
         Schema::create('clients', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('dni')->unique()->index();
-            $table->string('name')->index()->nullable();
-            $table->string('last_name')->index()->nullable();
-            $table->string('commerce_name')->index()->nullable();
-            $table->string('description')->index()->nullable();
-            $table->string('phone')->nullable();
-            $table->string('address')->nullable();
-            $table->string('email')->nullable();
-            $table->string('image')->nullable();
-            $table->string('code')->nullable();
-            $table->integer('type')->index()->nullable();
-            $table->integer('status')->index();
-            $table->integer('account')->index();
-            $table->boolean('deleted')->default(false);
+            $table->string('code')->unique();
+            $table->integer('status')->default(Client::CLIENT_ACTIVE);
             $table->timestamps();
-
-            $table->foreign('type')->references('id')->on('types')->onUpdate('cascade')->onDelete('restrict');
-
+            $table->softDeletes();
         });
     }
 

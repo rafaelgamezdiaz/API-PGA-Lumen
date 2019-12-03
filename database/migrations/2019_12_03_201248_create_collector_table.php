@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class RevokeUniqueToClientsTable extends Migration
+class CreateCollectorsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class RevokeUniqueToClientsTable extends Migration
      */
     public function up()
     {
-        Schema::table('clients', function (Blueprint $table) {
-            $table->dropUnique('clients_dni_unique');
+        Schema::create('collectors', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -25,8 +28,6 @@ class RevokeUniqueToClientsTable extends Migration
      */
     public function down()
     {
-        Schema::table('clients', function (Blueprint $table) {
-            $table->unique('dni');
-        });
+        Schema::dropIfExists('collectors');
     }
 }

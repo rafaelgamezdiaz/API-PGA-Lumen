@@ -13,16 +13,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Client extends Model
 {
-    public $timestamps = true;
-    protected $primaryKey = 'id';
-    protected $table ="clients";
+    const CLIENT_ACTIVE = 'active';
+    const CLIENT_INACTIVE = 'inactive';
+
     protected $fillable = [
-        'id','dni', 'identifier', 'name','image','last_name','commerce_name','description','phone','address',
-        'email','code','account','deleted','type','status','provider'
+        'code','status'
     ];
 
-    public function venues(){
-        return $this->hasMany('App\Models\Venue','client','id');
+    public function payments(){
+        return $this->hasMany('App\Models\Payment');
     }
 
 }
