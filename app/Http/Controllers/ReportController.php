@@ -39,8 +39,8 @@ class ReportController extends TatucoController
         $report->dataPerSheet($info);
         $report->index($request->index);
         $report->data($request->data);
-        $report->username($user->username);
-        $report->getAccountInfo($user->current_account);
+        //$report->username($user->username);
+        //$report->getAccountInfo($user->current_account);
         $report->transmissionRaw();
         return $report->report("automatic",$name,null,null,false,1);
 

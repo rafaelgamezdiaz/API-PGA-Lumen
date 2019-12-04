@@ -15,17 +15,19 @@ class CreatePaymentsTable extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->increments('id');
-            $table->decimal('amount');
-            $table->integer('client_id');
+            $table->decimal('amount')->unsigned();
+            $table->date('date');
+            $table->integer('client_id')->unsigned();
             $table->foreign('client_id')
                   ->references('id')
                   ->on('clients');
-            $table->integer('collector_id');
+            $table->integer('collector_id')->unsigned();
             $table->foreign('collector_id')
                 ->references('id')
                 ->on('collectors');
             $table->softDeletes();
             $table->timestamps();
+
         });
     }
 

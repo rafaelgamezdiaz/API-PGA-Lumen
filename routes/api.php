@@ -11,11 +11,19 @@
 |
 */
 
-use Carbon\Carbon;
+//use Carbon\Carbon;
 
-$router->group(['prefix' => 'cs'], function () use ($router) {
+$router->group(['prefix' => 'ps'], function () use ($router) {
+
+    $router->get('/payments', 'Payment\PaymentController@index');
+    $router->post('/payments', 'Payment\PaymentController@store');
+
+    $router->group(['prefix' => 'report'], function () use ($router) {
+        $router->post('/automatic', 'ReportController@automatic');
+    });
 
 
+    /*
     $router->get('/', function () use ($router) {
         return response()->json([
             "version"=> $router->app->version(),
@@ -51,5 +59,7 @@ $router->group(['prefix' => 'cs'], function () use ($router) {
         $router->group(['prefix' => 'selects'], function () use ($router) {
             $router->get('/clients', 'ClientController@selectClients');
         });
+
+    */
 
     });

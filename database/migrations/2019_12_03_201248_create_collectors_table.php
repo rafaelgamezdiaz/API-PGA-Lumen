@@ -15,7 +15,8 @@ class CreateCollectorsTable extends Migration
     {
         Schema::create('collectors', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
+            $table->string('api_collector_id')->unique(); // External id from the APP
+            $table->string('collector_name');
             $table->timestamps();
             $table->softDeletes();
         });

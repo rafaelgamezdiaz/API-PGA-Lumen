@@ -17,11 +17,15 @@ class Client extends Model
     const CLIENT_INACTIVE = 'inactive';
 
     protected $fillable = [
-        'code','status'
+        'enterprise_id','code','enterprise_name','status'
     ];
 
     public function payments(){
-        return $this->hasMany('App\Models\Payment');
+        return $this->hasMany(Payment::class);
+    }
+
+    public function isActive(){
+        return $this->status == Client::CLIENT_ACTIVE;
     }
 
 }
