@@ -20,6 +20,8 @@ class Client extends Model
         'enterprise_id','code','enterprise_name','status'
     ];
 
+    protected $hidden = ['id', 'status', 'created_at', 'updated_at', 'deleted_at'];
+
     public function payments(){
         return $this->hasMany(Payment::class);
     }

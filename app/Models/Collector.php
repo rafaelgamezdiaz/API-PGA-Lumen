@@ -16,6 +16,8 @@ class Collector extends Model
         'collector_name', 'api_collector_id'
     ];
 
+    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at'];
+
     public function payments(){
         return $this->hasMany(Payment::class);
     }

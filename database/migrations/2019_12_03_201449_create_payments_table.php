@@ -17,6 +17,8 @@ class CreatePaymentsTable extends Migration
             $table->increments('id');
             $table->decimal('amount')->unsigned();
             $table->date('date');
+            $table->integer('journal_id')->unsigned();
+            $table->integer('payment_method_id')->unsigned();
             $table->integer('client_id')->unsigned();
             $table->foreign('client_id')
                   ->references('id')
