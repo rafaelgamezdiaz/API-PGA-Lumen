@@ -6,3 +6,4 @@ Homestead.yaml
 .env
 /public/reports
 /public/images
+.idea/workspace.xml
