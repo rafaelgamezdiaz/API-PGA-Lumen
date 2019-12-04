@@ -1,0 +1,8 @@
+/vendor
+/.idea
+Homestead.json
+Homestead.yaml
+.gitlab-ci.yml
+.env
+/public/reports
+/public/images

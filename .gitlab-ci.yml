@@ -1,0 +1,177 @@
+##
+# Ansible managed
+#
+
+stages:
+  - backup
+  - build
+  - deploy
+  - rollback
+
+
+dev_backup_job:
+  stage: backup
+  script:
+    - docker image tag devpga-api:latest devpga-api:prev || true
+  tags:
+    - devapp
+  only :
+    - develop
+
+dev_build_job:
+  stage: build
+  script:
+    - sed -i -e "s;^\s*APP_DEBUG=.*;APP_DEBUG=True;g" .env
+    - sed -i -e "s;^\s*DB_CONNECTION=.*;DB_CONNECTION=pgsql;g" .env
+    - sed -i -e "s;^\s*DB_HOST=.*;DB_HOST=192.168.0.10;g" .env
+    - sed -i -e "s;^\s*DB_PORT=.*;DB_PORT=5433;g" .env
+    - sed -i -e "s;^\s*DB_DATABASE=.*;DB_DATABASE=devpga;g" .env
+    - sed -i -e "s;^\s*DB_USERNAME=.*;DB_USERNAME=devpga;g" .env
+    - sed -i -e "s;^\s*DB_PASSWORD=.*;DB_PASSWORD=$DEV_DB_PASS;g" .env
+    - sed -i -e "s;^\s*CUSTOM_URL=.*;CUSTOM_URL=https://devpga.zippyttech.com/pga;g" .env
+    - docker build -t devpga-api .
+  when: on_success
+  tags:
+    - devapp
+  only :
+    - develop
+
+dev_deploy_job:
+  stage: deploy
+  script:
+    - docker stop devpga-api || true
+    - docker rm devpga-api || true
+    - docker run -d --restart always --name devpga-api -p 3009:80 devpga-api
+    - docker exec devpga-api php artisan migrate
+  when: on_success
+  tags:
+    - devapp
+  only:
+    - develop
+
+dev_rollback_job:
+  stage: rollback
+  script:
+    - docker image tag devpga-api:prev devpga-api:latest
+    - docker stop devpga-api || true
+    - docker rm devpga-api || true
+    - docker run -d --restart always --name devpga-api -p 3009:80 devpga-api
+  when: manual
+  tags:
+    - devapp
+  only:
+    - develop
+
+
+
+
+qa_backup_job:
+  stage: backup
+  script:
+    - docker image tag qapga-api:latest qapga-api:prev || true
+  tags:
+    - qaapp
+  only :
+    - QA
+
+qa_build_job:
+  stage: build
+  script:
+    - sed -i -e "s;^\s*APP_DEBUG=.*;APP_DEBUG=False;g" .env
+    - sed -i -e "s;^\s*DB_CONNECTION=.*;DB_CONNECTION=pgsql;g" .env
+    - sed -i -e "s;^\s*DB_HOST=.*;DB_HOST=10.0.0.25;g" .env
+    - sed -i -e "s;^\s*DB_PORT=.*;DB_PORT=5432;g" .env
+    - sed -i -e "s;^\s*DB_DATABASE=.*;DB_DATABASE=qapga;g" .env
+    - sed -i -e "s;^\s*DB_USERNAME=.*;DB_USERNAME=qapga;g" .env
+    - sed -i -e "s;^\s*DB_PASSWORD=.*;DB_PASSWORD=$QA_DB_PASS;g" .env
+    - sed -i -e "s;^\s*CUSTOM_URL=.*;CUSTOM_URL=https://qapga.zippyttech.com/pga;g" .env
+    - docker build -t qapga-api .
+  when: on_success
+  tags:
+    - qaapp
+  only :
+    - QA
+
+qa_deploy_job:
+  stage: deploy
+  script:
+    - docker stop qapga-api || true
+    - docker rm qapga-api || true
+    - docker run -d --restart always --name qapga-api -p 3008:80 qapga-api
+    - docker exec qapga-api php artisan migrate
+  when: on_success
+  tags:
+    - qaapp
+  only:
+    - QA
+
+qa_rollback_job:
+  stage: rollback
+  script:
+    - docker image tag qapga-api:prev qapga-api:latest
+    - docker stop qapga-api || true
+    - docker rm qapga-api || true
+    - docker run -d --restart always --name qapga-api -p 3008:80 qapga-api
+  when: manual
+  tags:
+    - qaapp
+  only:
+    - QA
+
+
+
+
+prod_backup_job:
+  stage: backup
+  script:
+    - docker image tag prodpga-api:latest prodpga-api:prev || true
+  tags:
+    - prodapp
+  only :
+    - tags
+
+prod_build_job:
+  stage: build
+  script:
+    - sed -i -e "s;^\s*APP_DEBUG=.*;APP_DEBUG=False;g" .env
+    - sed -i -e "s;^\s*DB_CONNECTION=.*;DB_CONNECTION=pgsql;g" .env
+    - sed -i -e "s;^\s*DB_HOST=.*;DB_HOST=10.0.0.31;g" .env
+    - sed -i -e "s;^\s*DB_PORT=.*;DB_PORT=5432;g" .env
+    - sed -i -e "s;^\s*DB_DATABASE=.*;DB_DATABASE=pga;g" .env
+    - sed -i -e "s;^\s*DB_USERNAME=.*;DB_USERNAME=pga;g" .env
+    - sed -i -e "s;^\s*DB_PASSWORD=.*;DB_PASSWORD=$PROD_DB_PASS;g" .env
+    - sed -i -e "s;^\s*CUSTOM_URL=.*;CUSTOM_URL=https://pga.zippyttech.com/pga;g" .env
+    - docker build -t prodpga-api .
+  when: on_success
+  tags:
+    - prodapp
+  only :
+    - tags
+
+prod_deploy_job:
+  stage: deploy
+  script:
+    - docker stop prodpga-api || true
+    - docker rm prodpga-api || true
+    - docker run -d --restart always --name prodpga-api -p 3004:80 prodpga-api
+    - docker exec prodpga-api php artisan migrate
+  when: on_success
+  tags:
+    - prodapp
+  only:
+    - tags
+
+prod_rollback_job:
+  stage: rollback
+  script:
+    - docker image tag prodpga-api:prev prodpga-api:latest
+    - docker stop prodpga-api || true
+    - docker rm prodpga-api || true
+    - docker run -d --restart always --name prodpga-api -p 3004:80 prodpga-api
+  when: manual
+  tags:
+    - prodapp
+  only:
+    - tags
+
+
