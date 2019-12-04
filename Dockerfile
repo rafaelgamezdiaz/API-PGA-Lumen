@@ -28,7 +28,6 @@ RUN mkdir -p /var/www/html
 WORKDIR /var/www/html
 COPY . /var/www/html
 RUN cd /var/www/html && composer install
-RUN php artisan migrate
 
 RUN chmod -R 777 storage
 RUN chmod -R 777 public
