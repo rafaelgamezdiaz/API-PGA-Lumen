@@ -8,10 +8,7 @@
 
 namespace App\Models;
 
-
-use Illuminate\Database\Eloquent\Model;
-
-class Client extends Model
+class Client extends TatucoModel
 {
     const CLIENT_ACTIVE = 'active';
     const CLIENT_INACTIVE = 'inactive';

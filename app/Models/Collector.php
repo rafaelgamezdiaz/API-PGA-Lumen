@@ -8,9 +8,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Collector extends Model
+class Collector extends TatucoModel
 {
     protected $fillable = [
         'collector_name', 'api_collector_id'

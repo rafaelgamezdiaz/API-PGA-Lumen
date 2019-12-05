@@ -9,9 +9,8 @@
 namespace App\Models;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
 
-class Payment extends Model
+class Payment extends TatucoModel
 {
     // Passing these two params as constant in the actual version of the api
     const JOURNAL_ID = 7;
