@@ -8,6 +8,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Payment extends Model
@@ -23,13 +24,13 @@ class Payment extends Model
         'client_id',
         'collector_id',
         'journal_id',
+        'created_at',
         'payment_method_id'
     ];
 
     protected $hidden = [
         'client_id',
         'collector_id',
-        'created_at',
         'updated_at',
         'deleted_at',
     ];
@@ -40,6 +41,11 @@ class Payment extends Model
 
     public function collector(){
         return $this->belongsTo(Collector::class);
+    }
+
+
+    public function getCreatedAtAttribute($value){
+        return Carbon::parse($value)->format("Y-m-d");
     }
 
 }

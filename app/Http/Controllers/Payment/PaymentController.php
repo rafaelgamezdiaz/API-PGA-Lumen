@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Payment;
 
 use App\Http\Controllers\ApiController;
-use App\Http\Repositories\PaymentRepository;
+use App\Http\Repositories\ClientRepository;
+use App\Http\Repositories\CollectorRepository;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -19,6 +20,8 @@ class PaymentController extends ApiController
     public function index()
     {
         $fields = Payment::all();
+        //$fields = Payment::all();
+        return $fields;
         $fields->each(function($fields){
             $fields->client;
             $fields->collector;
@@ -47,18 +50,11 @@ class PaymentController extends ApiController
             'collector_name'    => 'required|string'
         ];
         $this->validate($request, $rules);
-
-
-        $client_id = PaymentRepository::getClientId($request);
-        $collector_id = PaymentRepository::getCollectorId($request);
-        $now = Carbon::now();
-        $date = $now->year.'-'.$now->month.'-'.$now->day;
-
         $payment = Payment::create([
             'amount'            => $request->amount,
-            'date'              => $date,
-            'client_id'         => $client_id,
-            'collector_id'      => $collector_id,
+            'date'              => $this->today(),
+            'client_id'         => ClientRepository::getClientId($request),
+            'collector_id'      => CollectorRepository::getCollectorId($request),
             'journal_id'        => Payment::JOURNAL_ID,
             'payment_method_id' => Payment::PAYMENT_METHOD_ID
         ]);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Traits\ApiResponser;
+use Illuminate\Support\Carbon;
 
 class ApiController extends Controller
 {
@@ -43,5 +44,10 @@ class ApiController extends Controller
        $model->save();
        return $this->showOne('The resource was updated', $model);
    }
+
+    public static function today(){
+        $now = Carbon::now();
+        return $now->year.'-'.$now->month.'-'.$now->day;
+    }
 
 }
