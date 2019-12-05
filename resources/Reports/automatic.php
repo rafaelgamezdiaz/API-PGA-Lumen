@@ -46,9 +46,9 @@
     <table>
         <thead>
         <tr>
-            <!--?php foreach ($index as $title => $value):?-->
-                <th>Reporte Pagos Aguaseo<!--?php echo $title ?--></th>
-            <!--?php endforeach ?-->
+            <?php foreach ($index as $title => $value):?>
+                <th>Reporte Pagos Aguaseo<?php echo $title ?></th>
+            <?php endforeach ?>
         </tr>
         </thead>
         <tbody>
@@ -57,7 +57,6 @@
                 <?php foreach ($index as $title):?>
                     <td><?php echo is_array($key) ? $key[$title] ?? null : $key->$title ?? null?></td>
                 <?php endforeach ?>
-
             </tr>
         <?php endforeach ?>
         </tbody>
