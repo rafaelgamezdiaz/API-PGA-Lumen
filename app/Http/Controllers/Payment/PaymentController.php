@@ -20,8 +20,6 @@ class PaymentController extends ApiController
     public function index()
     {
         $fields = Payment::all();
-        //$fields = Payment::all();
-        return $fields;
         $fields->each(function($fields){
             $fields->client;
             $fields->collector;
