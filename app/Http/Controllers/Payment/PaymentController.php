@@ -19,16 +19,13 @@ class PaymentController extends ApiController
      */
     public function index(Request $request)
     {
-        $fields = Payment::all();
+       // $fields = Payment::all();
 
         $fields = (isset($_GET['where'])) ? Payment::doWhere($request)->get() : Payment::all();
-       /* if(isset($_GET['where'])){
-            $fields->doWhere($request)->get();
-        }*/
-        /*$fields->each(function($fields){
+        $fields->each(function($fields){
             $fields->client;
             $fields->collector;
-        });*/
+        });
 
         return response()->json($fields, 200);
     }

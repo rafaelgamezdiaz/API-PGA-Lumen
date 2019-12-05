@@ -29,18 +29,20 @@ class ReportController extends TatucoController
     public function automatic(Request $request){
 
         $index= [$request->index];
+
         $info = [$request->data];
 
         $report = (new ReportService());
-        $user = $request->get('user')->user;
+        //$user = $request->get('user')->user;
         $name = $request->has('name') ? $request->input('name') : "Automatico";
 
         $report->indexPerSheet($index);
+        return $report;
         $report->dataPerSheet($info);
         $report->index($request->index);
         $report->data($request->data);
-        $report->username($user->username);
-        $report->getAccountInfo($user->current_account);
+       // $report->username($user->username);
+       // $report->getAccountInfo($user->current_account);
         $report->transmissionRaw();
         return $report->report("automatic",$name,null,null,false,1);
 

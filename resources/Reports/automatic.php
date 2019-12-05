@@ -46,9 +46,9 @@
     <table>
         <thead>
         <tr>
-            <?php foreach ($index as $title => $value):?>
-                <th><?php echo $title ?></th>
-            <?php endforeach ?>
+            <!--?php foreach ($index as $title => $value):?-->
+                <th>Reporte Pagos Aguaseo<!--?php echo $title ?--></th>
+            <!--?php endforeach ?-->
         </tr>
         </thead>
         <tbody>
