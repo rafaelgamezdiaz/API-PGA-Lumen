@@ -33,24 +33,9 @@
     }
 </style>
 <body>
-<div>
-    <img  style="width: 130px;float: right;" src="<?= $logo ?>" alt="Logo" >
-    <div style="text-align: center;">
-        <h2>Reporte <?= $title ?></h2>
-    </div>
 
-</div>
 <div>
-    <h5>Fecha de emision: <?= $date; ?></h5>
-    <h5>Usuario: <?= $username; ?></h5>
     <table>
-        <thead>
-        <tr>
-            <?php foreach ($index as $title => $value):?>
-                <th>Reporte Pagos Aguaseo<?php echo $title ?></th>
-            <?php endforeach ?>
-        </tr>
-        </thead>
         <tbody>
         <?php foreach ($data as $key):?>
             <tr>

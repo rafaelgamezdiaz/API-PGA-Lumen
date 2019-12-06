@@ -27,7 +27,19 @@ class PaymentController extends ApiController
             $fields->collector;
         });
 
-        return response()->json($fields, 200);
+        $date_out = $fields->last()->created_at;
+        $timezone = "America/Panama";
+        date_default_timezone_set($timezone);
+        $offset = date('Z', strtotime($date_out));
+        $do = date('r', strtotime($date_out) + $offset);
+        //return response()->json($do, 200);
+        $d = (new \DateTime($do . ' UTC'))->format('U');
+
+        $do = date("Y-m-d H:i:s", $d);
+        return response()->json(['utc' => $date_out, 'local panama' =>$do], 200);
+
+
+        //return response()->json($fields, 200);
     }
 
 

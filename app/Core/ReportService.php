@@ -82,6 +82,7 @@ class ReportService
 
     }
 
+
     /**
      * @param bool $flag
      */
@@ -174,10 +175,10 @@ class ReportService
             $pathLogo = self::$log_url;
             $sheet = self::getDefaultConfiguration($spreadsheet,$pathLogo);
 
-            $sheet->getActiveSheet()->setCellValue("A6","Fecha de Emision: ");
+            /*$sheet->getActiveSheet()->setCellValue("A6","Fecha de Emision: ");
             $sheet->getActiveSheet()->setCellValue("B6",self::$date);
             $sheet->getActiveSheet()->setCellValue("C6",'Usuario: ');
-            $sheet->getActiveSheet()->setCellValue("D6",self::$username);
+            $sheet->getActiveSheet()->setCellValue("D6",self::$username);*/
 
             //Parsear la información a pasar
             foreach (self::$index as $title => $value) {
@@ -192,7 +193,8 @@ class ReportService
                 }
                 $arrayData[] = $toExcel;
             }
-            $sheet->getActiveSheet()->fromArray($arrayData, "Sin Registro", 'A7');
+
+            $sheet->getActiveSheet()->fromArray($arrayData, "Sin Registro", 'A2');
 
             $writer = IOFactory::createWriter($spreadsheet, "Xlsx");
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -364,12 +366,12 @@ class ReportService
                 $ff = date('Y-m-d', strtotime('next monday'));
                 $fi = $dt->isMonday() ? date('Y-m-d', $dt) : date('Y-m-d', strtotime("last Monday"));
             }
-            if (strtotime($fi) AND strtotime($ff)){
+            /*if (strtotime($fi) AND strtotime($ff)){
                 $spreadsheetCsv->getActiveSheet()->setCellValue("A4","Desde: ");
                 $spreadsheetCsv->getActiveSheet()->setCellValue("B4",$fi);
                 $spreadsheetCsv->getActiveSheet()->setCellValue("C4",'Hasta: ');
                 $spreadsheetCsv->getActiveSheet()->setCellValue("D4","$ff");
-            }
+            }*/
 
             //Parsear la información a pasar
             foreach (self::$index as $title => $value) {
@@ -424,8 +426,8 @@ class ReportService
 
             }
 
-            $spreadsheet->getActiveSheet()->setCellValue($columnStart.$rowStart,"Reporte de " . self::$title);
-            $spreadsheet->getActiveSheet()->mergeCells($columnStart.$rowStart.':'.$alphabet[$totalColumns] . '5');
+            //$spreadsheet->getActiveSheet()->setCellValue($columnStart.$rowStart,"Reporte de " . self::$title);
+            $spreadsheet->getActiveSheet()->mergeCells($columnStart.$rowStart.':'.$alphabet[$totalColumns] . '1');
             $spreadsheet->getActiveSheet()->getStyle($columnStart.$rowStart)->getFont()->setSize(16);
             $spreadsheet->getActiveSheet()->getStyle($columnStart.$rowStart)->getAlignment()
                 ->applyFromArray([
@@ -442,10 +444,11 @@ class ReportService
                         ],
                     ],
                 ]);
+
             $spreadsheet->getActiveSheet()->getStyle($columnStart.$rowStart.':'.$alphabet[$totalColumns].'1')->getFill()->setFillType(Fill::FILL_SOLID);
             $spreadsheet->getActiveSheet()->getStyle('A1:'.$alphabet[$totalColumns].'1')->getFont()->getColor()->setARGB('00000000');
 
-            if ($pathLogo){
+            /*if ($pathLogo){
                 $drawing = new Drawing();
                 $drawing->setName('Logo');
                 $drawing->setDescription('Logo');
@@ -454,7 +457,7 @@ class ReportService
                 $drawing->setWidth(100);
                 $drawing->setCoordinates($alphabet[$totalColumns].$rowStart);
                 $drawing->setWorksheet($spreadsheet->getActiveSheet());
-            }
+            }*/
             return $spreadsheet;
         }catch (Exception $exception){
             Log::critical($exception->getMessage() . $exception->getLine() . $exception->getFile());

@@ -42,7 +42,7 @@ class Payment extends TatucoModel
 
 
     public function getCreatedAtAttribute($value){
-        return Carbon::parse($value)->format("Y-m-d");
+        return Carbon::parse($value)->format("Y-m-d h:m:s");
     }
 
 }
