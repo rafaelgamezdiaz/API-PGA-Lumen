@@ -32,7 +32,7 @@ class ReportController extends TatucoController
         $info = [$request->data];
         $report = (new ReportService());
         $nameEnd = $this->nameEnd($request);
-        $name = $request->has('name') ? $request->input('name') : "Pagos_".$nameEnd;
+        $name = $request->has('name') ? $request->input('name') : "Pagos"; //.$nameEnd;
         $report->indexPerSheet($index);
         $report->dataPerSheet($info);
         $report->index($request->index);
