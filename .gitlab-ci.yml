@@ -28,7 +28,7 @@ dev_build_job:
     - sed -i -e "s;^\s*DB_DATABASE=.*;DB_DATABASE=devpga;g" .env
     - sed -i -e "s;^\s*DB_USERNAME=.*;DB_USERNAME=devpga;g" .env
     - sed -i -e "s;^\s*DB_PASSWORD=.*;DB_PASSWORD=$DEV_DB_PASS;g" .env
-    - sed -i -e "s;^\s*CUSTOM_URL=.*;CUSTOM_URL=https://devpga.zippyttech.com/pga;g" .env
+    - sed -i -e "s;^\s*CUSTOM_URL=.*;CUSTOM_URL=https://devpga.zippyttech.com/;g" .env
     - docker build -t devpga-api .
   when: on_success
   tags:
@@ -84,7 +84,7 @@ qa_build_job:
     - sed -i -e "s;^\s*DB_DATABASE=.*;DB_DATABASE=qapga;g" .env
     - sed -i -e "s;^\s*DB_USERNAME=.*;DB_USERNAME=qapga;g" .env
     - sed -i -e "s;^\s*DB_PASSWORD=.*;DB_PASSWORD=$QA_DB_PASS;g" .env
-    - sed -i -e "s;^\s*CUSTOM_URL=.*;CUSTOM_URL=https://qapga.zippyttech.com/pga;g" .env
+    - sed -i -e "s;^\s*CUSTOM_URL=.*;CUSTOM_URL=https://qapga.zippyttech.com/;g" .env
     - docker build -t qapga-api .
   when: on_success
   tags:
@@ -140,7 +140,7 @@ prod_build_job:
     - sed -i -e "s;^\s*DB_DATABASE=.*;DB_DATABASE=pga;g" .env
     - sed -i -e "s;^\s*DB_USERNAME=.*;DB_USERNAME=pga;g" .env
     - sed -i -e "s;^\s*DB_PASSWORD=.*;DB_PASSWORD=$PROD_DB_PASS;g" .env
-    - sed -i -e "s;^\s*CUSTOM_URL=.*;CUSTOM_URL=https://pga.zippyttech.com/pga;g" .env
+    - sed -i -e "s;^\s*CUSTOM_URL=.*;CUSTOM_URL=https://pga.zippyttech.com/;g" .env
     - docker build -t prodpga-api .
   when: on_success
   tags:
