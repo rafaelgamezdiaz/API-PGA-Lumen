@@ -72,7 +72,7 @@ class PaymentController extends ApiController
             'payment_method_id' => Payment::PAYMENT_METHOD_ID
         ]);
         if($payment){
-            return response()->json(['message' => '¡Pago realizado con Éxito!'], 200);
+            return response()->json(['message' => '¡Pago realizado con Éxito!', 'ID del pago: ' => $payment->id], 200);
         }
         return response()->json(['error' => 'Error al intentar registrar el pago.'], 409);
     }
