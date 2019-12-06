@@ -22,6 +22,7 @@ class Payment extends TatucoModel
         'client_id',
         'collector_id',
         'journal_id',
+        'created_at',
         'payment_method_id'
     ];
 
@@ -40,9 +41,8 @@ class Payment extends TatucoModel
         return $this->belongsTo(Collector::class);
     }
 
-
     public function getCreatedAtAttribute($value){
-        return Carbon::parse($value)->format("Y-m-d h:m:s");
+        return Carbon::parse($value)->timezone("America/Panama")->format("Y-m-d"); //format("Y-m-d h:i:s")
     }
 
 }
