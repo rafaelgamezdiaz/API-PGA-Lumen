@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Payment;
 
 use App\Http\Controllers\ApiController;
-use App\Http\Repositories\PaymentRepository;
+use App\Http\Repositories\ClientRepository;
+use App\Http\Repositories\CollectorRepository;
 use App\Models\Payment;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
-
 
 class PaymentController extends ApiController
 {
@@ -16,18 +15,15 @@ class PaymentController extends ApiController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $fields = Payment::all();
+        $fields = (isset($_GET['where'])) ? Payment::doWhere($request)->get() : Payment::all();
         $fields->each(function($fields){
             $fields->client;
             $fields->collector;
         });
-
         return response()->json($fields, 200);
     }
-
-
 
     /**
      * Store the specified resource.
@@ -47,26 +43,17 @@ class PaymentController extends ApiController
             'collector_name'    => 'required|string'
         ];
         $this->validate($request, $rules);
-
-
-        $client_id = PaymentRepository::getClientId($request);
-        $collector_id = PaymentRepository::getCollectorId($request);
-        $now = Carbon::now();
-        $date = $now->year.'-'.$now->month.'-'.$now->day;
-
         $payment = Payment::create([
             'amount'            => $request->amount,
-            'date'              => $date,
-            'client_id'         => $client_id,
-            'collector_id'      => $collector_id,
+            'client_id'         => ClientRepository::getClientId($request),
+            'collector_id'      => CollectorRepository::getCollectorId($request),
             'journal_id'        => Payment::JOURNAL_ID,
             'payment_method_id' => Payment::PAYMENT_METHOD_ID
         ]);
         if($payment){
-            return response()->json(['message' => '¡Pago realizado con Éxito!'], 200);
+            return response()->json(['message' => '¡Pago realizado con Éxito!', 'id' => $payment->id], 200);
         }
         return response()->json(['error' => 'Error al intentar registrar el pago.'], 409);
     }
-
 
 }

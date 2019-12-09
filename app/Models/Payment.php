@@ -8,9 +8,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
-class Payment extends Model
+class Payment extends TatucoModel
 {
     // Passing these two params as constant in the actual version of the api
     const JOURNAL_ID = 7;
@@ -19,17 +19,16 @@ class Payment extends Model
 
     protected $fillable = [
         'amount',
-        'date',
         'client_id',
         'collector_id',
         'journal_id',
+        'created_at',
         'payment_method_id'
     ];
 
     protected $hidden = [
         'client_id',
         'collector_id',
-        'created_at',
         'updated_at',
         'deleted_at',
     ];
@@ -40,6 +39,10 @@ class Payment extends Model
 
     public function collector(){
         return $this->belongsTo(Collector::class);
+    }
+
+    public function getCreatedAtAttribute($value){
+        return Carbon::parse($value)->timezone("America/Panama")->format("Y-m-d"); //format("Y-m-d h:i:s")
     }
 
 }
