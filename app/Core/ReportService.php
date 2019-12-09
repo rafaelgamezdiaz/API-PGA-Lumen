@@ -415,11 +415,20 @@ class ReportService
             $totalRows = count(self::$data) +2;
 
             for ($i="A";$i<"Z";$i++){
-                $spreadsheet->getActiveSheet()->getColumnDimension($i)->setAutoSize(true);
+                $spreadsheet->getActiveSheet()
+                            ->getColumnDimension($i)
+                            ->setAutoSize(true);
             }
 
-            $spreadsheet->getActiveSheet()->getStyle($columnStart.$rowStart.':'.$alphabet[$totalColumns].'1')->getFill()->setFillType(Fill::FILL_SOLID);
-            $spreadsheet->getActiveSheet()->getStyle('A1:'.$alphabet[$totalColumns].'1')->getFont()->getColor()->setARGB('00000000');
+            $spreadsheet->getActiveSheet()
+                        ->getStyle($columnStart.$rowStart.':'.$alphabet[$totalColumns].'1')
+                        ->getFill()
+                        ->setFillType(Fill::FILL_SOLID);
+            $spreadsheet->getActiveSheet()
+                        ->getStyle('A1:'.$alphabet[$totalColumns].'1')
+                        ->getFont()
+                        ->getColor()
+                        ->setARGB('00000000');
             return $spreadsheet;
         }catch (Exception $exception){
             Log::critical($exception->getMessage() . $exception->getLine() . $exception->getFile());

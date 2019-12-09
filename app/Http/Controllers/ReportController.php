@@ -31,8 +31,10 @@ class ReportController extends TatucoController
         $index= [$request->index];
         $info = [$request->data];
         $report = (new ReportService());
-        $nameEnd = $this->nameEnd($request);
-        $name = $request->has('name') ? $request->input('name') : "Pagos"; //.$nameEnd;
+        $name_date_ini = $this->dateToStr($request, 0, 'fechaInicio');
+        $name_date_end = $this->dateToStr($request, 1, 'fechaFin');
+
+        $name = $request->has('name') ? $request->input('name') : "Pagos".$name_date_ini.$name_date_end; //.$nameEnd;
         $report->indexPerSheet($index);
         $report->dataPerSheet($info);
         $report->index($request->index);
@@ -42,14 +44,8 @@ class ReportController extends TatucoController
         return $report->report("automatic",$name,null,null,false,1);
     }
 
-
-    private function nameEnd($request){
-        $date_ini = $this->dateToStr($request, 0, 'fechaInicio');
-        $date_end = $this->dateToStr($request, 1, 'fechaFin');
-        return ($date_ini == $date_end) ? "_".$date_ini : "_".$date_ini."_".$date_end;
-    }
-
     private function dateToStr($request, $pos, $dateItem){
-        return implode(explode('-',$request->range[$pos][$dateItem]));
+        $date = implode(explode('-',$request->range[$pos][$dateItem]));
+        return $date != '' ? '_'.$date : '';
     }
 }
