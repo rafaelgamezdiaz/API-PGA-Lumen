@@ -27,4 +27,5 @@ class Client extends TatucoModel
         return $this->status == Client::CLIENT_ACTIVE;
     }
 
+
 }

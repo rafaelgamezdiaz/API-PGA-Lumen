@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Transaction;
+namespace App\Http\Controllers\Collector;
 
 use App\Http\Controllers\ApiController;
-use App\Models\Seller;
+use App\Models\Collector;
 
-class SellerController extends ApiController
+class CollectorController extends ApiController
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +14,8 @@ class SellerController extends ApiController
      */
     public function index()
     {
-        /*$transaction = TransactionCollection::collection(Transaction::all());
-        return $this->showAll('TRANSACTIONS LIST', $transaction);*/
+        $clients = Collector::all();
+        return response()->json(['data' => $clients, 'code' => 200], 200);
     }
 
 
@@ -26,7 +26,7 @@ class SellerController extends ApiController
      * @param  \App\Transaction  $transaction
      * @return \Illuminate\Http\Response
      */
-    public function show(Seller $seller)
+    public function show(Collector $seller)
     {
     /*    $transaction = new TransactionResource($transaction);
         return $this->showOne('Info of Transaction', $transaction);*/

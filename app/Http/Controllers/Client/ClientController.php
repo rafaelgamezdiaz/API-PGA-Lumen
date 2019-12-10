@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Transaction;
+namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\ApiController;
 use App\Models\Client;
@@ -14,8 +14,8 @@ class ClientController extends ApiController
      */
     public function index()
     {
-       /* $transaction = Client::collection(Client::all());
-        return $this->showAll('TRANSACTIONS LIST', $transaction);*/
+        $clients = Client::all();
+        return response()->json(['data' => $clients, 'code' => 200], 200);
     }
 
 
@@ -26,8 +26,10 @@ class ClientController extends ApiController
      * @param  \App\Transaction  $transaction
      * @return \Illuminate\Http\Response
      */
-    public function show(Client $client)
-    {
+    public function show( $id ){
+
+        $client = Client::findOrFail($id);
+        return response()->json(['data' => $client, 'code' => 200], 200);
        /* $transaction = new TransactionResource($transaction);
         return $this->showOne('Info of Transaction', $transaction);*/
     }

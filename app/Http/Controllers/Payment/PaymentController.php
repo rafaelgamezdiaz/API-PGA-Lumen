@@ -17,7 +17,7 @@ class PaymentController extends ApiController
      */
     public function index(Request $request)
     {
-        $fields = (isset($_GET['where'])) ? Payment::doWhere($request)->get() : Payment::all();
+        $fields = (isset($_GET['where'])) ? Payment::doWhere($request)->orderBy('created_at', 'desc')->get() : Payment::all()->sortByDesc('created_at');
         $fields->each(function($fields){
             $fields->client;
             $fields->collector;

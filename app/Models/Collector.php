@@ -20,4 +20,12 @@ class Collector extends TatucoModel
         return $this->hasMany(Payment::class);
     }
 
+    public function setCollectorNameAttribute($value){
+        return $this->attributes['collector_name'] = strtolower($value);
+    }
+
+    public function getCollectorNameAttribute($value){
+        return ucwords($value);
+    }
+
 }
