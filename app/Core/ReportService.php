@@ -82,6 +82,7 @@ class ReportService
 
     }
 
+
     /**
      * @param bool $flag
      */
@@ -168,16 +169,10 @@ class ReportService
      */
     public static function excel(string $fi = null, string $ff=null){
         try{
-
             $toExcel = $arrayData = [];
             $spreadsheet = new Spreadsheet();
             $pathLogo = self::$log_url;
-            $sheet = self::getDefaultConfiguration($spreadsheet,$pathLogo);
-
-            $sheet->getActiveSheet()->setCellValue("A6","Fecha de Emision: ");
-            $sheet->getActiveSheet()->setCellValue("B6",self::$date);
-            $sheet->getActiveSheet()->setCellValue("C6",'Usuario: ');
-            $sheet->getActiveSheet()->setCellValue("D6",self::$username);
+            $sheet = self::getDefaultConfiguration($spreadsheet,$pathLogo, 'A',1);
 
             //Parsear la información a pasar
             foreach (self::$index as $title => $value) {
@@ -192,18 +187,18 @@ class ReportService
                 }
                 $arrayData[] = $toExcel;
             }
-            $sheet->getActiveSheet()->fromArray($arrayData, "Sin Registro", 'A7');
+
+            $sheet->getActiveSheet()->fromArray($arrayData, "Sin Registro", 'A1')->refreshColumnDimensions();
 
             $writer = IOFactory::createWriter($spreadsheet, "Xlsx");
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-            header('Content-Disposition: attachment; filename="reporte.xlsx"');
-            header('Access-Control-Allow-Origin:*');
 
 
             if (self::$external) {
                 $writer->save('./reports/'.self::$name.'.xls');
-                return response()->json(["message"=>'reports/'.self::$name.'.xls'],200);
+                return response()->json(["message"=> 'reports/'.self::$name.'.xls'],200);
             }
+            header('Access-Control-Allow-Origin:*');
             $writer->save("php://output");
 
             return null;
@@ -364,12 +359,12 @@ class ReportService
                 $ff = date('Y-m-d', strtotime('next monday'));
                 $fi = $dt->isMonday() ? date('Y-m-d', $dt) : date('Y-m-d', strtotime("last Monday"));
             }
-            if (strtotime($fi) AND strtotime($ff)){
+            /*if (strtotime($fi) AND strtotime($ff)){
                 $spreadsheetCsv->getActiveSheet()->setCellValue("A4","Desde: ");
                 $spreadsheetCsv->getActiveSheet()->setCellValue("B4",$fi);
                 $spreadsheetCsv->getActiveSheet()->setCellValue("C4",'Hasta: ');
                 $spreadsheetCsv->getActiveSheet()->setCellValue("D4","$ff");
-            }
+            }*/
 
             //Parsear la información a pasar
             foreach (self::$index as $title => $value) {
@@ -420,41 +415,20 @@ class ReportService
             $totalRows = count(self::$data) +2;
 
             for ($i="A";$i<"Z";$i++){
-                $spreadsheet->getActiveSheet()->getColumnDimension($i)->setAutoSize(true);
-
+                $spreadsheet->getActiveSheet()
+                            ->getColumnDimension($i)
+                            ->setAutoSize(true);
             }
 
-            $spreadsheet->getActiveSheet()->setCellValue($columnStart.$rowStart,"Reporte de " . self::$title);
-            $spreadsheet->getActiveSheet()->mergeCells($columnStart.$rowStart.':'.$alphabet[$totalColumns] . '5');
-            $spreadsheet->getActiveSheet()->getStyle($columnStart.$rowStart)->getFont()->setSize(16);
-            $spreadsheet->getActiveSheet()->getStyle($columnStart.$rowStart)->getAlignment()
-                ->applyFromArray([
-                    'horizontal' => Alignment::HORIZONTAL_CENTER,
-                    'vertical' => Alignment::VERTICAL_CENTER
-                ]);
-
-            $spreadsheet->getActiveSheet()->getStyle($columnStart.$totalRows.':' . $alphabet[$totalColumns] . $totalRows)
-                ->applyFromArray([
-                    'borders' => [
-                        'outline' => [
-                            'borderStyle' => Border::BORDER_THIN,
-                            'color' => ['argb' => 'FF000000'],
-                        ],
-                    ],
-                ]);
-            $spreadsheet->getActiveSheet()->getStyle($columnStart.$rowStart.':'.$alphabet[$totalColumns].'1')->getFill()->setFillType(Fill::FILL_SOLID);
-            $spreadsheet->getActiveSheet()->getStyle('A1:'.$alphabet[$totalColumns].'1')->getFont()->getColor()->setARGB('00000000');
-
-            if ($pathLogo){
-                $drawing = new Drawing();
-                $drawing->setName('Logo');
-                $drawing->setDescription('Logo');
-                $drawing->setPath($pathLogo);
-                $drawing->setHeight(30);
-                $drawing->setWidth(100);
-                $drawing->setCoordinates($alphabet[$totalColumns].$rowStart);
-                $drawing->setWorksheet($spreadsheet->getActiveSheet());
-            }
+            $spreadsheet->getActiveSheet()
+                        ->getStyle($columnStart.$rowStart.':'.$alphabet[$totalColumns].'1')
+                        ->getFill()
+                        ->setFillType(Fill::FILL_SOLID);
+            $spreadsheet->getActiveSheet()
+                        ->getStyle('A1:'.$alphabet[$totalColumns].'1')
+                        ->getFont()
+                        ->getColor()
+                        ->setARGB('00000000');
             return $spreadsheet;
         }catch (Exception $exception){
             Log::critical($exception->getMessage() . $exception->getLine() . $exception->getFile());

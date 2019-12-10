@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class RevokeUniqueToClientsTable extends Migration
+class RemoveFieldDateInPayments extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class RevokeUniqueToClientsTable extends Migration
      */
     public function up()
     {
-        Schema::table('clients', function (Blueprint $table) {
-            $table->dropUnique('clients_dni_unique');
+        Schema::table('payments', function (Blueprint $table) {
+            $table->dropColumn('date');
         });
     }
 
@@ -25,8 +25,8 @@ class RevokeUniqueToClientsTable extends Migration
      */
     public function down()
     {
-        Schema::table('clients', function (Blueprint $table) {
-            $table->unique('dni');
+        Schema::table('payments', function (Blueprint $table) {
+//            $table->date('date');
         });
     }
 }

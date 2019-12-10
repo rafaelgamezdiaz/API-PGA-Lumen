@@ -26,23 +26,26 @@ class ReportController extends TatucoController
      * @param Request $request
      * @return \Dompdf\Dompdf|\Illuminate\Http\JsonResponse|string|null
      */
-    public function automatic(Request $request){
-
+    public function automatic(Request $request)
+    {
         $index= [$request->index];
         $info = [$request->data];
-
         $report = (new ReportService());
-        $user = $request->get('user')->user;
-        $name = $request->has('name') ? $request->input('name') : "Automatico";
+        $name_date_ini = $this->dateToStr($request, 0, 'fechaInicio');
+        $name_date_end = $this->dateToStr($request, 1, 'fechaFin');
 
+        $name = $request->has('name') ? $request->input('name') : "Pagos".$name_date_ini.$name_date_end; //.$nameEnd;
         $report->indexPerSheet($index);
         $report->dataPerSheet($info);
         $report->index($request->index);
         $report->data($request->data);
-        $report->username($user->username);
-        $report->getAccountInfo($user->current_account);
+        $report->external();
         $report->transmissionRaw();
         return $report->report("automatic",$name,null,null,false,1);
+    }
 
+    private function dateToStr($request, $pos, $dateItem){
+        $date = implode(explode('-',$request->range[$pos][$dateItem]));
+        return $date != '' ? '_'.$date : '';
     }
 }

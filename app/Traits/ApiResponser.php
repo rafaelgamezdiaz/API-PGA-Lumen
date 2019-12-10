@@ -12,9 +12,9 @@ trait ApiResponser
      * @param  int $code
      * @return Illuminate\Http\JsonResponse
      */
-    public function successResponse($data, $code = Response::HTTP_OK)
+    public function successResponse($message, $code = Response::HTTP_OK)
     {
-        return response()->json(['data' => $data], $code);
+        return response()->json(['message' => $message, 'code' => $code], $code);
     }
 
     /**
