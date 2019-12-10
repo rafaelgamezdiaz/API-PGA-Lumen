@@ -20,7 +20,7 @@ class ClientRepository
      * @return mixed
      */
     public static function getClientId($request){
-        $client_exist = Client::where('code', $request->code)
+        $client_exist = Client::where('enterprise_id', $request->enterprise_id)
             ->where('status', Client::CLIENT_ACTIVE);
         if($client_exist->count() == 0){
             $client = Client::create([
