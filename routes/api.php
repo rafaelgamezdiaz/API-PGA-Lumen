@@ -33,4 +33,5 @@ $router->group(['prefix' => 'pga'], function () use ($router) {
 
     // COLLECTORS
     $router->get('/collectors', 'Collector\CollectorController@index');
+    $router->get('/collectors/{id}', 'Collector\CollectorPaymentsController@show');
 });
