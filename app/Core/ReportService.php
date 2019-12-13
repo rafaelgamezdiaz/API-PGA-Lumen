@@ -195,7 +195,7 @@ class ReportService
 
 
             if (self::$external) {
-                $writer->save('./reports/'.self::$name.'.xls');
+                $writer->save(env('CUSTOM_URL').'/reports/'.self::$name.'.xls');
                 return response()->json(["message"=> 'reports/'.self::$name.'.xls'],200);
             }
             header('Access-Control-Allow-Origin:*');
