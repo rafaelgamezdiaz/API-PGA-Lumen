@@ -27,13 +27,15 @@ class CollectorPaymentsController extends ApiController
      */
     public function show($id)
     {
-        $collector = Collector::findOrFail($id);
-        $payments = $collector->payments;
-        $payments->each(function ($payments){
-           $payments->client;
-        });
-
-        return response()->json(['data' => $payments, 'code' => 200], 200);
+        $collector = Collector::where('api_collector_id', $id)->first();
+        if($collector != null){
+            $payments = $collector->payments;
+            $payments->each(function ($payments){
+                $payments->client;
+            });
+            return response()->json(['data' => $payments, 'code' => 200], 200);
+        }
+        return response()->json(['message' => 'There is not collector with this id', 'code' => 200], 200);
     }
 
 }
