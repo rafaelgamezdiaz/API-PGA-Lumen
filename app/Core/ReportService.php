@@ -191,12 +191,12 @@ class ReportService
             $sheet->getActiveSheet()->fromArray($arrayData, "Sin Registro", 'A1')->refreshColumnDimensions();
 
             $writer = IOFactory::createWriter($spreadsheet, "Xlsx");
-            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Type: application/vnd.openxmlformats-env('CUSTOM_URL').officedocument.spreadsheetml.sheet');
 
             // Add Custom URL
             if (self::$external) {
                 $writer->save('./reports/'.self::$name.'.xls');
-                return response()->json(["message"=> 'reports/'.self::$name.'.xls'],200);
+                return response()->json(["message"=> env('CUSTOM_URL').'/reports/'.self::$name.'.xls'],200);
             }
             header('Access-Control-Allow-Origin:*');
             $writer->save("php://output");
