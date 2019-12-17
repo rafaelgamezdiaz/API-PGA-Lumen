@@ -193,10 +193,10 @@ class ReportService
             $writer = IOFactory::createWriter($spreadsheet, "Xlsx");
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 
-
+            // Add Custom URL
             if (self::$external) {
-                $writer->save(env('CUSTOM_URL').'/reports/'.self::$name.'.xls');
-                return response()->json(["message"=> 'reports/'.self::$name.'.xls'],200);
+                $writer->save('./reports/'.self::$name.'.xls');
+                return response()->json(["message"=> env('CUSTOM_URL').'/reports/'.self::$name.'.xls'],200);
             }
             header('Access-Control-Allow-Origin:*');
             $writer->save("php://output");
