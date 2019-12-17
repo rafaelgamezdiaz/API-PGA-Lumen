@@ -29,23 +29,36 @@ class ReportController extends TatucoController
     public function automatic(Request $request)
     {
         $index= [$request->index];
-        $info = [$request->data];
+        $info = $this->sortByDate([$request->data]);
+        $name_date = $this->dateToStr($info[0]);
         $report = (new ReportService());
-        $name_date_ini = $this->dateToStr($request, 0, 'fechaInicio');
-        $name_date_end = $this->dateToStr($request, 1, 'fechaFin');
-
-        $name = $request->has('name') ? $request->input('name') : "Pagos".$name_date_ini.$name_date_end; //.$nameEnd;
+        $name = $request->has('name') ? $request->input('name') : "Pagos".$name_date;
         $report->indexPerSheet($index);
         $report->dataPerSheet($info);
-        $report->index($request->index);
         $report->data($request->data);
+        $report->index($request->index);
         $report->external();
         $report->transmissionRaw();
         return $report->report("automatic",$name,null,null,false,1);
     }
 
-    private function dateToStr($request, $pos, $dateItem){
-        $date = implode(explode('-',$request->range[$pos][$dateItem]));
-        return $date != '' ? '_'.$date : '';
+    private function dateToStr($info){
+        if (count($info) > 0) {
+            $dateIni = $info[0]['fecha_de_pago'];
+            $dateEnd = $info[count($info)-1]['fecha_de_pago'];
+        }
+        return $this->formatDateToString($dateIni, $dateEnd);
+    }
+
+    private function formatDateToString($dateIni, $dateEnd){
+        $date_ini = implode(explode('-',$dateIni));
+        $date_end = implode(explode('-',$dateEnd));
+        return $date_ini != $date_end ? '_'.$date_ini.'_'.$date_end : '_'.$date_ini;
+    }
+
+
+    private function sortByDate($info){
+        $infoSorted = collect($info[0])->sortBy('fecha_de_pago')->values()->all();
+        return [$infoSorted];
     }
 }
