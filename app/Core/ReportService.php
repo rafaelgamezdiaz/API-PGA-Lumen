@@ -184,7 +184,7 @@ class ReportService
                 $toArray = is_object($key) ? $key : is_array($key) ? (object) $key : null;
                 foreach (self::$index as $title => $value) {
                     $toExcel[$i] = $toArray->$value ?? null;
-                    if ($title == 'Cantidad a pagar') {
+                    if (strtolower($title) == 'cantidad a pagar') {
                         $total_pagado += $toArray->$value;
                     }
                     $i++;
