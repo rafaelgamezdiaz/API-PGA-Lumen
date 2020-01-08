@@ -37,13 +37,23 @@
 <div>
     <table>
         <tbody>
-        <?php foreach ($data as $key):?>
+            <?php $total = 0; ?>
+            <?php foreach ($data as $key):?>
+                <tr>
+                    <?php foreach ($index as $title):?>
+                        <td><?php echo is_array($key) ? $key[$title] ?? null : $key->$title ?? null?></td>
+                    <?php endforeach ?>
+                    <?php $total += $key['amount']; ?>
+                </tr>
+            <?php endforeach ?>
             <tr>
-                <?php foreach ($index as $title):?>
-                    <td><?php echo is_array($key) ? $key[$title] ?? null : $key->$title ?? null?></td>
-                <?php endforeach ?>
+                <td>Total Pagado</td>
+                <td><?php echo $total; ?></td>
             </tr>
-        <?php endforeach ?>
+            <tr>
+                <td>Total de Operaciones</td>
+                <td><?php echo count($data); ?></td>
+            </tr>
         </tbody>
     </table>
 </div>

@@ -42,7 +42,7 @@ class Payment extends TatucoModel
     }
 
     public function getCreatedAtAttribute($value){
-        return Carbon::parse($value)->timezone("America/Panama")->format("Y-m-d"); //format("Y-m-d h:i:s")
+        return Carbon::parse($value)->timezone("America/Panama")->format("Y-m-d h:i:s"); //format("Y-m-d h:i:s")
     }
 
 }

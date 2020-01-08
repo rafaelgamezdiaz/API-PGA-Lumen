@@ -178,15 +178,24 @@ class ReportService
             foreach (self::$index as $title => $value) {
                 $arrayData[0][]=$title;
             }
+            $total_pagado = 0;
+            $total_operaciones = 0;
             foreach (self::$data as $key){
                 $i=1;
                 $toArray = is_object($key) ? $key : is_array($key) ? (object) $key : null;
                 foreach (self::$index as $title => $value) {
                     $toExcel[$i] = $toArray->$value ?? null;
+                    if (strtolower($title) == 'cantidad a pagar') {
+                        $total_pagado += $toArray->$value;
+                    }
                     $i++;
                 }
+                $total_operaciones++;
                 $arrayData[] = $toExcel;
             }
+            $arrayData[] = ['Total Pagado', $total_pagado];
+            $arrayData[] = ['Total de Operaciones', $total_operaciones];
+
 
             $sheet->getActiveSheet()->fromArray($arrayData, "Sin Registro", 'A1')->refreshColumnDimensions();
 
