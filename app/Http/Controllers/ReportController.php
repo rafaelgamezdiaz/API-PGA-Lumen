@@ -45,7 +45,7 @@ class ReportController extends TatucoController
     private function dateToStr($info){
         if (count($info) > 0) {
             $dateIni = $info[0]['fecha_de_pago'];
-            $dateEnd = $info[count($info)-1]['fecha_de_pago'];
+            $dateEnd = $info[count($info[0])]['fecha_de_pago'];
         }
         return $this->formatDateToString($dateIni, $dateEnd);
     }
