@@ -37,12 +37,24 @@ class PaymentController extends ApiController
         $rules = [
             'code'              => 'required',
             'enterprise_id'     => 'required',
-            'enterprise_name'   => 'required|string',
-            'amount'            => 'required|numeric',
+            'enterprise_name'   => 'required',
+            'amount'            => 'required|numeric|min:1',
             'api_collector_id'  => 'required',
             'collector_name'    => 'required|string'
         ];
-        $this->validate($request, $rules);
+        $messages = [
+            'code.required'             => 'Debe ingresar el codigo de la empresa',
+            'enterprise_id.required'    => 'Debe ingresar el id de la empresa',
+            'enterprise_name.required'  => 'Debe ingresar el nombre de la empresa',
+            'amount.required'           => 'Debe ingresar el monto a pagar',
+            'amount.numeric'            => 'El monto a pagar debe ser numerico y mayor a cero',
+            'amount.min'                => 'El monto a pagar debe ser mayor a cero',
+            'api_collector_id.required' => 'Debe ingresar el id del cobrador',
+            'collector_name.required'   => 'Debe ingresar el nombre del cobrador',
+            'collector_name.string'     => 'Formato incorrecto para el nombre del cobrador'
+
+        ];
+        $this->validate($request, $rules, $messages);
         $payment = Payment::create([
             'amount'            => $request->amount,
             'client_id'         => ClientRepository::getClientId($request),
